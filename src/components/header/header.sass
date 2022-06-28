@@ -1,0 +1,42 @@
+@import '../../styles/mixins'
+@import '../../styles/variables'
+
+.layout-header
+  +flex(row, space-between, center)
+  width: 100%
+
+  &_brand
+    @include flex($flexDirection: row, $alignDirection: center)
+
+    span
+      cursor: pointer
+
+    .company-logo
+      padding-left: 20px
+
+      img
+        margin-bottom: 10px
+        cursor: pointer
+
+  &_title
+    @include typograph($size: 21px, $weight: 700, $color: $natural_60)
+
+  &_user
+    .ant-avatar
+      background-color: $green_60
+      margin-right: 10px
+
+    .ant-dropdown-link
+      padding: 15px 0
+
+    &__username
+      @include typograph($size: 14px, $weight: 500, $color: $natural_60)
+      margin-right: 10px
+
+    &__caret
+      color: $natural_60
+
+
+
+
+

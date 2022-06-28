@@ -1,0 +1,36 @@
+@import '../../styles/variables'
+
+.layout-sidebar
+  .ant-drawer-content-wrapper
+    width: 256px !important
+
+  .ant-drawer-wrapper-body
+    scrollbar-width: thin
+    overflow-x: hidden !important
+
+    &::-webkit-scrollbar
+      width: 8px
+
+    &::-webkit-scrollbar-track
+      box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3)
+
+    &::-webkit-scrollbar-thumb
+      background-color: darkgrey
+      outline: none
+
+  .ant-drawer-header
+    padding-top: 16px
+    padding-bottom: 14px
+
+  .divider
+    border-top: 1px solid $natural_30
+    margin-top: 0px !important
+    margin-bottom: 12px !important
+    height: 0px !important
+
+  .added-menu:last-child
+    margin-bottom: 32px !important
+
+  .ant-drawer-body
+    padding: 0
+

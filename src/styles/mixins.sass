@@ -1,0 +1,24 @@
+@mixin flex($flexDirection: false, $justifyDirection: false, $alignDirection: false, $flexWrap: false, $alignContent: false)
+  display: flex
+  @if $flexDirection != false
+    flex-direction: $flexDirection
+  @if $justifyDirection
+    justify-content: $justifyDirection
+  @if $alignDirection
+    align-items: $alignDirection
+  @if $flexWrap
+    flex-wrap: $flexWrap
+  @if $alignContent
+    align-content: $alignContent
+
+@mixin typograph($size: false, $weight: false, $color: false, $lineHeight: false, $letterSpacing: false)
+  @if $size != false
+    font-size: $size
+  @if $weight != false
+    font-weight: $weight
+  @if $color != false
+    color: $color
+  @if $lineHeight != false
+    line-height: $lineHeight
+  @if $letterSpacing != false
+    letter-spacing: $letterSpacing
