@@ -15,9 +15,10 @@ const SidebarLayout = ({ visible, showSidebar }) => {
   })
 
   const items = [
-    getItem('Navigation One', 'menu1', <MailOutlined />),
-    getItem('Navigation Two', 'menu2', <MailOutlined />),
-    getItem('Navigation Three', 'menu3', <SettingOutlined />),
+    getItem('Blog', 'menu1', <MailOutlined />),
+    getItem('Agenda', 'menu2', <MailOutlined />),
+    getItem('Karir', 'menu3', <SettingOutlined />),
+    getItem('Map Management', 'menu3', <SettingOutlined />),
   ];
 
   return (

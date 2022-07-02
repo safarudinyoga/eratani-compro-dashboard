@@ -1,0 +1,56 @@
+@import '../../styles/mixins'
+@import '../../styles/variables'
+
+.ant-pagination-item:focus,
+.ant-pagination-item:hover,
+.ant-pagination-item-active,
+.ant-pagination-item-active:focus,
+.ant-pagination-item-active:hover
+  border-color: $green_60 !important
+
+.ant-pagination-item:focus a,
+.ant-pagination-item:hover a
+  color: $green_60 !important
+
+.ant-pagination-item-active a,
+.ant-pagination-item-active:focus a,
+.ant-pagination-item-active:hover a
+  color: white !important
+
+.ant-pagination-item-active
+  color: white !important
+  border-color: $green_60 !important
+  background-color: $green_60 !important
+
+.ant-pagination-options-quick-jumper
+  inpu
+    &:hover,
+    &:focus
+      border-color: $green_60 !important
+      box-shadow: none !important
+
+
+
+.ant-pagination-jump-prev
+.ant-pagination-item-container
+.ant-pagination-item-link-icon,
+.ant-pagination-jump-next
+.ant-pagination-item-container
+.ant-pagination-item-link-icon
+  color: $green_60 !important
+
+.ant-pagination-prev:focus
+.ant-pagination-item-link,
+.ant-pagination-next:focus
+.ant-pagination-item-link,
+.ant-pagination-prev:hover
+.ant-pagination-item-link,
+.ant-pagination-next:hover
+.ant-pagination-item-link
+  border-color: $green_60 !important
+  color: $green_60 !important
+
+.table-pagination
+  +flex(column, center, center)
+  margin-top: 25px
+  margin-bottom: 25px
