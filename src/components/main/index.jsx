@@ -8,13 +8,13 @@ import './main.sass'
 
 const { Content } = Layout
 
-const Main = ({ children }) => {
+const Main = ({ children, title }) => {
   const [sidebarVisible, setSidebarVisible] = useState(false)
 
   return (
     <Layout>
       <SidebarLayout visible={sidebarVisible} showSidebar={() => setSidebarVisible(!sidebarVisible)} />
-      <HeaderLayout showSidebar={() => setSidebarVisible(!sidebarVisible)} />
+      <HeaderLayout title={title} showSidebar={() => setSidebarVisible(!sidebarVisible)} />
       <Content className='main_content'>
         {children}
       </Content>

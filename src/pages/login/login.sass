@@ -1,0 +1,30 @@
+@import '../../styles/mixins'
+@import '../../styles/variables'
+
+.login
+  @include flex($flexDirection: row, $justifyDirection: center, $alignDirection: center)
+  min-height: calc(100vh - 100px)
+  padding: 50px 20px
+
+  &_inner
+    max-width: 415px
+    background-color: #fff
+    width: 100%
+    margin: 0  auto
+    padding: 50px
+    box-shadow: 0px 4px 24px rgba(0, 0, 0, 0.1)
+    -webkit-border-radius: 2px
+    -moz-border-radius: 2px
+    border-radius: 2px
+    text-align: center
+
+  &_title
+    @include typograph($size: 19px, $weight: 700, $color: $green_60 )
+    margin: 20px 0 0
+
+  p
+    @include typograph($weight: 500, $color: $green_100)
+    margin-bottom: 20px
+
+
+

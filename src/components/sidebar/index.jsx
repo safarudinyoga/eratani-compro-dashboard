@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Button, Drawer, Icon, Menu } from 'antd';
-import { MailOutlined, SettingOutlined } from '@ant-design/icons';
+import { MailOutlined, SettingOutlined, DashboardOutlined, ReadOutlined, CalendarOutlined, TeamOutlined, EnvironmentOutlined } from '@ant-design/icons';
+import { NavLink } from 'react-router-dom';
 
 // components & styles
 import './sidebar.sass'
@@ -15,10 +16,45 @@ const SidebarLayout = ({ visible, showSidebar }) => {
   })
 
   const items = [
-    getItem('Blog', 'menu1', <MailOutlined />),
-    getItem('Agenda', 'menu2', <MailOutlined />),
-    getItem('Karir', 'menu3', <SettingOutlined />),
-    getItem('Map Management', 'menu3', <SettingOutlined />),
+    {
+      label: (
+        <NavLink to='/home'><span>home</span></NavLink>
+      ),
+      key: 'home',
+      icon: <DashboardOutlined />
+    },
+    {
+      label: (
+        <NavLink to='/blog'><span>Blog</span></NavLink>
+      ),
+      key: 'blog',
+      icon: <ReadOutlined />
+    },
+    {
+      label: (
+        <NavLink to='/event'><span>Agenda</span></NavLink>
+      ),
+      key: 'event',
+      icon: <CalendarOutlined />
+    },
+    {
+      label: (
+        <NavLink to='/career'><span>Karir</span></NavLink>
+      ),
+      key: 'career',
+      icon: <TeamOutlined />
+    },
+    {
+      label: (
+        <NavLink to='/map'><span>Map Management</span></NavLink>
+      ),
+      key: 'map',
+      icon: <EnvironmentOutlined />
+    },
+    // getItem('Blog', 'blog', <MailOutlined />),
+    // getItem('Agenda', 'event', <MailOutlined />),
+    // getItem('Karir', 'career', <SettingOutlined />),
+    // getItem('Map Management', 'map', <SettingOutlined />),
   ];
 
   return (
@@ -32,8 +68,6 @@ const SidebarLayout = ({ visible, showSidebar }) => {
     >
       <Menu
         mode="inline"
-        // defaultSelectedKeys={['1']}
-        // defaultOpenKeys={['sub1']}
         items={items}
       />
     </Drawer>

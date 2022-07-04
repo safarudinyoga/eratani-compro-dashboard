@@ -8,7 +8,7 @@ import './header.sass'
 
 const { Header } = Layout
 
-const HeaderLayout = ({ showSidebar }) => {
+const HeaderLayout = ({ showSidebar, title = 'Dashboard Company Profile'}) => {
   const getItem = (label, key, icon, children, type) => ({
     key,
     icon,
@@ -35,7 +35,7 @@ const HeaderLayout = ({ showSidebar }) => {
           </span>
         </div>
         <div className='layout-header_title'>
-          <span>Dashboard Company Profile</span>
+          <span>{title}</span>
         </div>
         <div className='layout-header_user'>
           <Dropdown overlay={menu} trigger={["click"]}>

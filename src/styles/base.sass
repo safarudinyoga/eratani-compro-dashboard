@@ -1,4 +1,5 @@
-@import './variables'
+@import 'variables'
+@import 'mixins'
 
 *, *:before, *:after
   box-sizing: border-box
@@ -31,3 +32,44 @@ body
 .ant-menu-item
   &:hover
     color: $green_60 !important
+
+.global-error-message
+  margin-top: 0.25rem
+  margin-bottom: 0
+  @include typograph($size: 12px, $weight: 400, $color: #AC2C24)
+
+.ant-input,
+.ant-select-selection
+  border: 1px solid #dbe0e4
+  height: 40px
+  font-family: inherit
+
+  &:hover
+    border-color: $green_60 !important
+
+  &:focus
+    border-color: $green_60 !important
+
+.ant-input::placeholder
+  text-overflow: ellipsis
+
+.ant-btn
+  font-family: inherit
+  height: 40px
+  font-size: 14px
+  @include typograph($size: 14px, $weight: 400, $color: #fff)
+
+
+  &:hover,
+  &:focus
+
+
+.ant-btn-primary,
+  .ant-btn-primary:focus,
+  .ant-btn-primary:hover
+    color: white !important
+    background-color: $green_60 !important
+    border: 1px solid transparent !important
+
+
+

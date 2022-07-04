@@ -1,16 +1,16 @@
 import React from 'react'
-import { UserContext } from './UserGlobalState'
+import { UserContext } from './userGlobalState'
 
 const withUserState = ComposedComponent => props => {
   return (
     <UserContext.Consumer>
       {
-        ({ user, roleAccess, setUserData, setUserDataFromLocalStorage }) => (
+        () => (
           <ComposedComponent
-            user={user}
-            setUser={setUserData}
-            setUserFromStorage={setUserDataFromLocalStorage}
-            roleAccess={roleAccess}
+            // user={user}
+            // setUser={setUserData}
+            // setUserFromStorage={setUserDataFromLocalStorage}
+            // roleAccess={roleAccess}
             { ...props }
           />
         )
