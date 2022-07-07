@@ -1,0 +1,21 @@
+@import '../../styles/mixins'
+@import '../../styles/variables'
+
+.career-detail
+  width: 100%
+  padding: 30px
+  background: #fff
+  border: 1px solid #dbe0e4
+  border-radius: 2px
+  @include flex($flexDirection: column, $justifyDirection: flex-start, $alignDirection: flex-start)
+  gap: 12px 50px
+
+  &_row
+    @include flex($flexDirection: row, $justifyDirection: flex-start, $alignDirection: center)
+
+  .text_field
+    @include typograph($size: 14px, $weight: 400, $color: $green_100)
+    margin: 0
+
+  .field
+    min-width: 150px

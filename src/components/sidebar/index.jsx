@@ -7,13 +7,6 @@ import { NavLink } from 'react-router-dom';
 import './sidebar.sass'
 
 const SidebarLayout = ({ visible, showSidebar }) => {
-  const getItem = (label, key, icon, children, type) => ({
-    key,
-    icon,
-    children,
-    label,
-    type
-  })
 
   const items = [
     {
@@ -51,10 +44,6 @@ const SidebarLayout = ({ visible, showSidebar }) => {
       key: 'map',
       icon: <EnvironmentOutlined />
     },
-    // getItem('Blog', 'blog', <MailOutlined />),
-    // getItem('Agenda', 'event', <MailOutlined />),
-    // getItem('Karir', 'career', <SettingOutlined />),
-    // getItem('Map Management', 'map', <SettingOutlined />),
   ];
 
   return (

@@ -1,0 +1,12 @@
+@import '../../styles/mixins'
+@import '../../styles/variables'
+
+.table-control
+  @include flex($flexDirection: row, $justifyDirection: space-between, $alignDirection: center)
+  margin: 0 0 20px
+
+  &_start_block
+    @include flex($flexDirection: row, $justifyDirection: flex-start, $alignDirection: center)
+
+  &_end_block
+    @include flex($flexDirection: row, $justifyDirection: flex-end, $alignDirection: center)

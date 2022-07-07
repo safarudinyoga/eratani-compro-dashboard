@@ -1,0 +1,44 @@
+@import '../../styles/mixins'
+@import '../../styles/variables'
+
+.blog_table
+  img
+    cursor: pointer
+    width: 100px
+    height: 50px
+    object-fit: contain
+
+.blog-detail
+  width: 100%
+  padding: 30px
+  background: #fff
+  border: 1px solid #dbe0e4
+  border-radius: 2px
+  @include flex($flexDirection: column, $justifyDirection: flex-start, $alignDirection: flex-start)
+  gap: 12px 50px
+
+  &_row
+    @include flex($flexDirection: row, $justifyDirection: flex-start, $alignDirection: center)
+
+  .text_field
+    @include typograph($size: 14px, $weight: 400, $color: $green_100)
+    margin: 0
+
+  .field
+    min-width: 100px
+
+  img
+    cursor: pointer
+    width: auto
+    height: 200px
+    object-fit: contain
+
+.blog-form
+  width: 100%
+  padding: 30px !important
+  background: #fff
+  border: 1px solid #dbe0e4
+  border-radius: 2px
+
+  // input
+  //   max-width: 500px
