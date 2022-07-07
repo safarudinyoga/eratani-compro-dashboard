@@ -2,7 +2,7 @@ import { useState, useCallback } from 'react'
 import PropTypes from 'prop-types'
 import { Table, Button } from 'antd'
 import ImageViewer from "react-simple-image-viewer";
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 import Main from '../../components/main'
 import TableControl from '../../components/table-control'
@@ -56,19 +56,12 @@ const columns = (openImageViewer) => [
   },
 ]
 
-const handleControl = {
-  button: {
-    text: 'Add Blog',
-    handleClick: () => {}
-  }
-}
-
 const Event = props => {
+  const navigate = useNavigate()
   const [currentImage, setCurrentImage] = useState('');
   const [isViewerOpen, setIsViewerOpen] = useState(false);
 
   const openImageViewer = useCallback((index) => {
-    console.log('masok');
     setCurrentImage(index);
     setIsViewerOpen(true);
   }, []);
@@ -77,6 +70,13 @@ const Event = props => {
     setCurrentImage(0);
     setIsViewerOpen(false);
   };
+
+  const handleControl = {
+    button: {
+      text: 'Add Event',
+      handleClick: () => navigate('/event/form')
+    }
+  }
 
   return (
     <>

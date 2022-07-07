@@ -5,16 +5,16 @@ import { useNavigate } from 'react-router-dom'
 import { LeftOutlined, CloudUploadOutlined, CloseCircleOutlined } from '@ant-design/icons';
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
-import { Button, Form, Input, message, Upload } from 'antd'
+import { Button, Form, Input, message, Upload, DatePicker } from 'antd'
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 
 import Breadcrumb from '../../../components/breadcrumb'
 import Main from '../../../components/main';
-import '../blog.sass'
+import '../event.sass'
 import TextError from '../../../components/error-message';
 
-const FormBlog = props => {
+const FormEvent = props => {
   const navigate = useNavigate();
   const [isUploading, setisUploading] = useState(false)
 
@@ -44,16 +44,26 @@ const FormBlog = props => {
     },
   ]
 
+  // "event_title" : "Test event title",
+  // "event_image" : "Event image url",
+  // "event_location" : "Event location string",
+  // "event_article" : "Event start",
+  // "event_start" : "2022-07-30T12:30:00Z"
+
   const { handleChange, handleSubmit, setFieldValue, values, errors, touched } = useFormik({
     initialValues: {
-      blog_title: '',
-      blog_image: '',
-      blog_article: '',
-      blog_category: ''
+      event_title : "",
+      event_image : "",
+      event_location : "",
+      event_article : "",
+      event_start : ""
     },
     validationSchema: Yup.object({
-      blog_title: Yup.string().required('Title is Required'),
-      blog_category: Yup.string().required('Category is Required'),
+      event_title: Yup.string().required('Title is Required'),
+      event_image: Yup.string().required('Title is Required'),
+      event_location: Yup.string().required('Title is Required'),
+      event_article: Yup.string().required('Title is Required'),
+      event_start: Yup.string().required('Title is Required'),
     }),
     onSubmit: (val) => {
       console.log(val);
@@ -79,7 +89,7 @@ const FormBlog = props => {
 
     if (info.file.status === 'done') {
       getBase64(info.file.originFileObj, (imageUrl) => {
-        setFieldValue('blog_image', imageUrl)
+        setFieldValue('event_image', imageUrl)
         setisUploading(false)
       })
     }
@@ -101,42 +111,39 @@ const FormBlog = props => {
 
     return isJpgOrPng && sizeAllowed;
   }
-
   return (
     <>
-      <Main title='Add Blog'>
+      <Main title='Add Event'>
         <Breadcrumb nav={nav} />
-        <Form className='blog-form'>
+        <Form className='event-form'>
           <Form.Item label='Title'>
             <Input
-              name='blog_title'
+              name='event_title'
               type='text'
-              value={values.blog_title}
+              value={values.event_title}
               onChange={handleChange}
-              placeholder='petani muda berdikasi tinggi...'
-              className={errors.blog_title && touched.blog_title && 'is-invalid'}
+              placeholder='event title'
+              className={errors.event_title && touched.event_title && 'is-invalid'}
             />
-            {errors.blog_title && touched.blog_title &&
-              <TextError>{errors.blog_title}</TextError>
+            {errors.event_title && touched.event_title &&
+              <TextError>{errors.event_title}</TextError>
             }
           </Form.Item>
-
-          <Form.Item label='Category'>
+          <Form.Item label='Event Location'>
             <Input
-              name='blog_category'
+              name='event_location'
               type='text'
-              value={values.blog_category}
+              value={values.event_location}
               onChange={handleChange}
               placeholder='tips'
-              className={errors.blog_category && touched.blog_category && 'is-invalid'}
+              className={errors.event_location && touched.event_location && 'is-invalid'}
             />
-            {errors.blog_category && touched.blog_category &&
-              <TextError>{errors.blog_category}</TextError>
+            {errors.event_location && touched.event_location &&
+              <TextError>{errors.event_location}</TextError>
             }
           </Form.Item>
-
           <Form.Item label='Image'>
-            {!values.blog_image ? (
+            {!values.event_image ? (
               <Upload
                 className="uploader"
                 showUploadList={false}
@@ -153,19 +160,30 @@ const FormBlog = props => {
               <div className='image-wrapper'>
                 <img
                   alt='blog'
-                  src={values.blog_image}
+                  src={values.event_image}
                   onError={({ currentTarget }) => {
                     currentTarget.onerror = null // prevents looping
                     currentTarget.src =
                       'https://upload.wikimedia.org/wikipedia/commons/6/65/No-Image-Placeholder.svg'
                   }}
-                  onClick={() => openImageViewer([values.blog_image])}
+                  onClick={() => openImageViewer([values.event_image])}
                 />
-                <CloseCircleOutlined className='close_sign' onClick={() => setFieldValue('blog_image', null)} />
+                <CloseCircleOutlined className='close_sign' onClick={() => setFieldValue('event_image', null)} />
               </div>
             )}
           </Form.Item>
-
+          <Form.Item label='Event Start'>
+            <DatePicker
+              name='event_start'
+              value={values.event_start}
+              onChange={(e) => setFieldValue('event_start', e)}
+              className={errors.event_start && touched.event_start && 'is-invalid'}
+              format='DD-MM-YYYY'
+            />
+            {errors.event_start && touched.event_start &&
+              <TextError>{errors.event_start}</TextError>
+            }
+          </Form.Item>
           <Form.Item label='Article'>
             <CKEditor
               editor={ ClassicEditor }
@@ -177,7 +195,7 @@ const FormBlog = props => {
               onChange={ ( event, editor ) => {
                 const data = editor.getData();
                 // console.log( { event, editor, data } );
-                setFieldValue('blog_article', data)
+                setFieldValue('event_article', data)
               }}
             />
           </Form.Item>
@@ -202,6 +220,6 @@ const FormBlog = props => {
   )
 }
 
-FormBlog.propTypes = {}
+FormEvent.propTypes = {}
 
-export default FormBlog
+export default FormEvent

@@ -32,3 +32,55 @@
     width: auto
     height: 200px
     object-fit: contain
+
+.event-form
+  width: 100%
+  padding: 30px !important
+  background: #fff
+  border: 1px solid #dbe0e4
+  border-radius: 2px
+
+  .image-wrapper
+    position: relative
+    width: 250px
+    height: 150px
+    cursor: pointer
+
+    &:hover
+      .close_sign
+        display: flex !important
+        transition: all .3s
+
+    .close_sign
+      z-index: 99
+      opacity: 1
+      display: none
+      cursor: pointer
+      svg
+        width: 20px
+        height: 20px
+        border-radius: 50%
+        position: absolute
+        top: 7px
+        right: 7px
+
+    img
+      width: 250px
+      height: 150px
+      background: #cfcfcf
+      border-radius: 4px
+      object-fit: contain
+
+  .uploader
+    cursor: pointer
+    .ant-upload
+      border-radius: 4px
+      border: 1px dashed #e0e0e0
+      width: 250px
+      height: 150px
+
+      span
+        @include flex($flexDirection: row, $justifyDirection: center, $alignDirection: center)
+
+  .ck-content
+    min-height: 100px

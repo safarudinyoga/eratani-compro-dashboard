@@ -11,6 +11,8 @@ import BlogDetail from '../pages/blog/blog-detail';
 import CareerDetail from '../pages/career/career-detail';
 import EventDetail from '../pages/event/event-detail';
 import FormBlog from '../pages/blog/form-blog';
+import FormCareer from '../pages/career/form-career';
+import FormEvent from '../pages/event/form-event';
 
 const publicRoute = [
   // all public route
@@ -22,8 +24,10 @@ const publicRoute = [
   { path: '/blog/form/*', element: <FormBlog /> },
   { path: '/career', element: <Career /> },
   { path: '/career/:id', element: <CareerDetail /> },
+  { path: '/career/form/*', element: <FormCareer /> },
   { path: '/event', element: <Event /> },
   { path: '/event/:id', element: <EventDetail /> },
+  { path: '/event/form/*', element: <FormEvent /> },
 ]
 
 const privateRoute = [

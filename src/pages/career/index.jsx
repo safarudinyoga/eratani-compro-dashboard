@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { Table, Button } from 'antd'
 import dayjs from 'dayjs'
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 import Main from '../../components/main'
 import TableControl from '../../components/table-control'
@@ -66,14 +66,17 @@ const columns = () => [
   },
 ]
 
-const handleControl = {
-  button: {
-    text: 'Add Career',
-    handleClick: () => {}
-  }
-}
+
 
 const Career = props => {
+  const navigate = useNavigate()
+
+  const handleControl = {
+    button: {
+      text: 'Add Career',
+      handleClick: () => navigate('/career/form')
+    }
+  }
   return (
     <Main title='Careers'>
       <TableControl handleControl={handleControl} />
