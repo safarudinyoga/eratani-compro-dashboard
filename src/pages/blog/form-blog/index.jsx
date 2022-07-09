@@ -1,21 +1,24 @@
 import React, { useEffect, useState, useCallback } from 'react'
 import PropTypes from 'prop-types'
 import ImageViewer from "react-simple-image-viewer";
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { LeftOutlined, CloudUploadOutlined, CloseCircleOutlined } from '@ant-design/icons';
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
 import { Button, Form, Input, message, Upload } from 'antd'
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import axios from 'axios';
 
 import Breadcrumb from '../../../components/breadcrumb'
 import Main from '../../../components/main';
 import '../blog.sass'
 import TextError from '../../../components/error-message';
+import { config, getErrorMessage, RESPONSE_STATUS } from '../../../utils/apiHelper';
 
 const FormBlog = props => {
   const navigate = useNavigate();
+  const { url: paramsURL } = useParams()
   const [isUploading, setisUploading] = useState(false)
 
   const [currentImage, setCurrentImage] = useState('');
@@ -30,6 +33,30 @@ const FormBlog = props => {
     setCurrentImage(0);
     setIsViewerOpen(false);
   };
+  console.log(paramsURL);
+
+  useEffect(() => {
+    if (!paramsURL) return
+
+
+    fetchDetail()
+  }, [])
+
+  const fetchDetail = async() => {
+    try {
+      const { data: { data }, status } = await axios.get(`https://compro-api.eratani.co.id/api/blogs/url/${paramsURL}`, config())
+      if (RESPONSE_STATUS.includes(status)) {
+        setValues({
+          blog_title: data.blog_title,
+          blog_image: data.blog_image,
+          blog_article: data.blog_article,
+          blog_category: data.blog_category
+        })
+      }
+    } catch (error) {
+      message.error(getErrorMessage(error))
+    }
+  }
 
   const nav = [
     {
@@ -44,7 +71,7 @@ const FormBlog = props => {
     },
   ]
 
-  const { handleChange, handleSubmit, setFieldValue, values, errors, touched } = useFormik({
+  const { handleChange, handleSubmit, setFieldValue, values, errors, touched, setValues } = useFormik({
     initialValues: {
       blog_title: '',
       blog_image: '',
@@ -104,7 +131,7 @@ const FormBlog = props => {
 
   return (
     <>
-      <Main title='Add Blog'>
+      <Main title={paramsURL ? 'Edit Blog' : 'Add Blog'}>
         <Breadcrumb nav={nav} />
         <Form className='blog-form'>
           <Form.Item label='Title'>

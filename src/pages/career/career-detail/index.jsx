@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { Button } from 'antd'
 import { useNavigate ,useParams } from 'react-router-dom'
 import { LeftOutlined } from '@ant-design/icons';
 import dayjs from 'dayjs';
@@ -51,6 +52,8 @@ const CareerDetail = props => {
           <h3 className="text_field">{dummy[item]}</h3>
         </div>
       )}
+
+      <Button type='primary' onClick={() => navigate(`/career/form/${dummy.job_url}`)}>Edit</Button>
       </div>
     </Main>
   )

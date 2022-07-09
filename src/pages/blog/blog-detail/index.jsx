@@ -9,6 +9,7 @@ import Breadcrumb from '../../../components/breadcrumb'
 import Main from '../../../components/main';
 import { slugDictionary } from '../../../utils/slugDictionary';
 import '../blog.sass'
+import { Button } from 'antd';
 
 const BlogDetail = props => {
   const navigate = useNavigate();
@@ -18,7 +19,6 @@ const BlogDetail = props => {
     "BlogCreator": "",
     "blog_article": "Blog article",
     "blog_category": "Abc",
-    "blog_id": 1,
     "blog_image": "https://images.unsplash.com/photo-1453728013993-6d66e9c9123a?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8dmlld3xlbnwwfHwwfHw%3D&w=1000&q=80",
     "blog_title": "Test blog title",
     "blog_url": "test-blog-title",
@@ -56,13 +56,14 @@ const BlogDetail = props => {
       <Main title='Blog Detail'>
         <Breadcrumb nav={nav} />
         <div className='blog-detail'>
-          {Object.keys(dummy).map((item, id) =>
-            <div className='blog-detail_row' key={id}>
+          {Object.keys(dummy).map((item, i) =>
+            <div className='blog-detail_row' key={i}>
               <h3 className='text_field field'>{slugDictionary[item]}</h3>
               <h3 className="text_field" style={{ margin: '0 5px' }}>:</h3>
               { item === 'blog_image' ? <img src={dummy[item]} alt='blog' onClick={() => openImageViewer([dummy[item]])} /> : <h3 className="text_field">{dummy[item]}</h3> }
             </div>
           )}
+        <Button type='primary' onClick={() => navigate(`/blog/form/${dummy.blog_url}`)}>Edit</Button>
         </div>
       </Main>
 

@@ -1,21 +1,25 @@
 import React, { useEffect } from 'react'
 import PropTypes from 'prop-types'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { LeftOutlined } from '@ant-design/icons';
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
 import { Button, Form, Input, message, Select, DatePicker } from 'antd'
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import axios from 'axios';
 
 import Breadcrumb from '../../../components/breadcrumb'
 import Main from '../../../components/main';
 import '../career.sass'
 import TextError from '../../../components/error-message';
+import { config, getErrorMessage, RESPONSE_STATUS } from '../../../utils/apiHelper';
+import dayjs from 'dayjs';
 
 const { Option } = Select;
 
 const FormCareer = props => {
+  const { url: paramsURL } = useParams()
   const navigate = useNavigate();
 
   const nav = [
@@ -31,7 +35,36 @@ const FormCareer = props => {
     },
   ]
 
-  const { handleChange, handleSubmit, setFieldValue, values, errors, touched } = useFormik({
+  useEffect(() => {
+    if (!paramsURL) return
+
+    fetchDetail()
+  }, [])
+
+  const fetchDetail = async() => {
+    try {
+      const { data: { data }, status } = await axios.get(`https://compro-api.eratani.co.id/api/jobs/url/${paramsURL}`)
+      if (RESPONSE_STATUS.includes(status)) {
+        setValues({
+          job_title: data.job_title,
+          job_level: data.job_level,
+          job_type: data.job_type,
+          job_category: data.job_category,
+          job_location: data.job_location,
+          job_experience: data.job_experience,
+          // job_application_deadline: dayjs(data.job_application_deadline || '').format('DD-MM-YYYY'),
+          job_requirements: data.job_requirements,
+          job_benefits: data.job_benefits,
+          job_link_url: data.job_link_url
+        })
+      }
+    } catch (error) {
+
+    }
+  }
+
+
+  const { handleChange, handleSubmit, setFieldValue, setValues,values, errors, touched } = useFormik({
     initialValues: {
       job_title: "",
       job_level: "",
@@ -139,7 +172,7 @@ const FormCareer = props => {
             <TextError>{errors.job_type}</TextError>
           }
         </Form.Item>
-        <Form.Item label='Level'>
+        <Form.Item label='Job Category'>
           <Select value={values.job_category} onChange={(val) => setFieldValue('job_category', val)}>
             {jobCategoryOption.map(({ value, label }, i) =>
               <Option value={value} key={i}>{label}</Option>
