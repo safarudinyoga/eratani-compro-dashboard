@@ -3,15 +3,17 @@ import ReactDOM from 'react-dom/client';
 import App from './router';
 import reportWebVitals from './reportWebVitals';
 import UserGlobalState from './context/userGlobalState';
-
 import './styles/index.scss'
-// import './index.css'
+import { unstable_HistoryRouter as HistoryRouter } from "react-router-dom";
+import { history } from './utils/history';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-  <UserGlobalState>
-    <App />
-  </UserGlobalState>
+  <HistoryRouter history={history}>
+    <UserGlobalState>
+      <App />
+    </UserGlobalState>
+  </HistoryRouter>
 );
 
 // If you want to start measuring performance in your app, pass a function

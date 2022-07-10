@@ -1,38 +1,13 @@
 import React from 'react'
-import { Route, Redirect } from 'react-router-dom'
-import PropTypes from 'prop-types'
-// import Cookies from 'universal-cookie'
+import { Navigate, Outlet } from 'react-router-dom'
+import { COOKIES, SITE_COOKIES } from '../../utils/cookies'
 
-// import { SITE_COOKIES, MENU } from '@config'
+const PrivateRoute = () => {
+  const auth = COOKIES.get(SITE_COOKIES.ACCESSTOKEN)
 
-// const cookies = new Cookies()
-
-const PrivateRouter = ({ component: Component, ...rest }) => (
-  <Route
-    {...rest}
-    render={(props) =>
-      // cookies.get(SITE_COOKIES.TOKEN) || cookies.get(SITE_COOKIES.SESSIONID)
-      true ? (
-        <Component {...props} />
-      ) : (
-        <Redirect
-          to={{
-            // pathname: MENU.LOGIN,
-            state: { from: props.location },
-          }}
-        />
-      )
-    }
-  />
-)
-
-PrivateRouter.defaultProps = {
-  location: null,
+   // If authorized, return an outlet that will render child elements
+  // If not, return element that will navigate to login page
+  return auth ? <Outlet /> : <Navigate to="/login" />;
 }
 
-PrivateRouter.propTypes = {
-  component: PropTypes.func.isRequired,
-  location: PropTypes.object,
-}
-
-export default PrivateRouter
+export default PrivateRoute

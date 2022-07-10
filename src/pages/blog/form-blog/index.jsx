@@ -44,7 +44,7 @@ const FormBlog = props => {
 
   const fetchDetail = async() => {
     try {
-      const { data: { data }, status } = await axios.get(`https://compro-api.eratani.co.id/api/blogs/url/${paramsURL}`, config())
+      const { data: { data }, status } = await axios.get(`https://compro-api.eratani.co.id/api/blogs/url/${paramsURL}`)
       if (RESPONSE_STATUS.includes(status)) {
         setValues({
           blog_title: data.blog_title,

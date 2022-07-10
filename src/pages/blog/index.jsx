@@ -1,6 +1,6 @@
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useEffect } from 'react'
 import PropTypes from 'prop-types'
-import { Table, Button } from 'antd'
+import { Table, Button, message } from 'antd'
 import ImageViewer from "react-simple-image-viewer";
 import { Link, useNavigate } from 'react-router-dom';
 
@@ -9,6 +9,8 @@ import Main from '../../components/main'
 import TablePagination from '../../components/table-pagination';
 import TableControl from '../../components/table-control';
 import './blog.sass'
+import { _axios } from '../../utils/_axios';
+import { getErrorMessage, RESPONSE_STATUS } from '../../utils/apiHelper';
 
 const dummy = [
   {
@@ -57,9 +59,9 @@ const columns = (openImageViewer) => [
   {
     title: '',
     key: 'viewDetail',
-    render: (_, { blog_id }) => (
+    render: (_, { blog_url }) => (
       <span>
-        <Link to={`/blog/${blog_id}`}>
+        <Link to={`/blog/${blog_url}`}>
           <Button type='primary'>
             Detail
           </Button>
@@ -73,6 +75,7 @@ const Blog = props => {
   const navigate = useNavigate()
   const [currentImage, setCurrentImage] = useState('');
   const [isViewerOpen, setIsViewerOpen] = useState(false);
+  const [isLoading, setisLoading] = useState(false)
 
   const openImageViewer = useCallback((index) => {
     setCurrentImage(index);
@@ -91,11 +94,31 @@ const Blog = props => {
     }
   }
 
+  useEffect(() => {
+
+  }, [])
+
+  const handleFetch = async () => {
+    setisLoading(true)
+
+    try {
+      const { data: { data }, status } = await _axios.get('/api/blogs/category')
+      if (RESPONSE_STATUS.includes(status)) {
+        setisLoading(false)
+      }
+    } catch (error) {
+      setisLoading(false)
+      message.error(getErrorMessage(error))
+    }
+  }
+
+
   return (
     <>
       <Main title='Blogs'>
         <TableControl handleControl={handleControl}  />
         <Table
+          loading={isLoading}
           dataSource={dummy}
           pagination={false}
           columns={columns(openImageViewer)}
@@ -111,6 +134,7 @@ const Blog = props => {
           }}
           showPageNumber
           go={() => console.log()}
+          loading={isLoading}
         />
       </Main>
 

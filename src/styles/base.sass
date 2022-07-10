@@ -36,8 +36,9 @@ body
 
 .global-error-message
   margin-top: 0.25rem
-  margin-bottom: 0
-  @include typograph($size: 12px, $weight: 400, $color: #AC2C24)
+  margin-bottom: 0 !important
+  @include typograph($size: 12px, $weight: 400, $color: #AC2C24 !important)
+  float: left
 
 .ant-input,
 .ant-select-selection

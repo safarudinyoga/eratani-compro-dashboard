@@ -1,7 +1,7 @@
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
+import { Route, Routes } from 'react-router-dom'
 import withUserState from '../context/withUserState';
 import App from '../App';
-import PrivateRouter from './private-router';
+import PrivateRoute from './private-router';
 import NotFound from '../pages/not-found';
 import Login from '../pages/login';
 import Blog from '../pages/blog';
@@ -18,6 +18,9 @@ const publicRoute = [
   // all public route
   { path: '/login', element: <Login /> },
   { path: '/', element: <Login /> },
+]
+
+const privateRoute = [
   { path: '/home', element: <App /> },
   { path: '/blog', element: <Blog /> },
   { path: '/blog/:id', element: <BlogDetail /> },
@@ -32,10 +35,6 @@ const publicRoute = [
   { path: '/event/form/*', element: <FormEvent /> },
 ]
 
-const privateRoute = [
-
-]
-
 const publicRouting = publicRoute.map((props, key) => (
   <Route
     {...props}
@@ -44,21 +43,21 @@ const publicRouting = publicRoute.map((props, key) => (
 ));
 
 const privateRouting = privateRoute.map((props, key) => (
-  <PrivateRouter
-    {...props}
-    key={key}
-  />
+    <Route
+      {...props}
+      key={key}
+    />
 ));
 
 const AppRoute = () => {
   return (
-    <Router>
-      <Routes>
-        {publicRouting}
-        {/* {privateRouting} */}
-        <Route element={NotFound} path='*' />
-      </Routes>
-    </Router>
+    <Routes>
+      {publicRouting}
+      <Route path='/' element={<PrivateRoute/>}>
+        {privateRouting}
+      </Route>
+      <Route element={NotFound} path='*' />
+    </Routes>
   )
 }
 
