@@ -16,6 +16,13 @@
   border-radius: 2px
   @include flex($flexDirection: column, $justifyDirection: flex-start, $alignDirection: flex-start)
   gap: 12px 50px
+  position: relative
+
+  .ant-btn
+    position: absolute
+    top: 30px
+    right: 30px
+    min-width: 150px
 
   &_row
     @include flex($flexDirection: row, $justifyDirection: flex-start, $alignDirection: center)
@@ -77,17 +84,6 @@
       background: #cfcfcf
       border-radius: 4px
       object-fit: contain
-
-  .uploader
-    cursor: pointer
-    .ant-upload
-      border-radius: 4px
-      border: 1px dashed #e0e0e0
-      width: 250px
-      height: 150px
-
-      span
-        @include flex($flexDirection: row, $justifyDirection: center, $alignDirection: center)
 
   .ck-content
     min-height: 100px

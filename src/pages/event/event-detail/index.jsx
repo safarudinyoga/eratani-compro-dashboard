@@ -1,18 +1,43 @@
-import { useCallback, useState } from 'react'
+import { useCallback, useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { useNavigate ,useParams } from 'react-router-dom'
 import { LeftOutlined } from '@ant-design/icons';
 import ImageViewer from "react-simple-image-viewer";
-import dayjs from 'dayjs';
+import { Button, message } from 'antd';
 
 import Breadcrumb from '../../../components/breadcrumb'
 import Main from '../../../components/main';
 import { slugDictionary } from '../../../utils/slugDictionary';
 import '../event.sass'
+import { _axios } from '../../../utils/_axios';
+import { getErrorMessage, RESPONSE_STATUS } from '../../../utils/apiHelper';
+import dayjs from 'dayjs';
 
 const EventDetail = props => {
+  const [isLoading, setisLoading] = useState(false)
+  const [data, setData] = useState({})
   const navigate = useNavigate();
   const { id } = useParams()
+
+  useEffect(() => {
+    handleFetchDetail()
+  }, [])
+
+  const handleFetchDetail = async() => {
+    setisLoading(true)
+
+    try {
+      const { data: { data }, status } = await _axios.get(`/api/events/url/${id}`)
+      if (RESPONSE_STATUS.includes(status)) {
+        setisLoading(false)
+        setData(data)
+      }
+    } catch (error) {
+      setisLoading(false)
+      message.error(getErrorMessage(error))
+    }
+  }
+
 
   const nav = [
     {
@@ -31,6 +56,8 @@ const EventDetail = props => {
   const [isViewerOpen, setIsViewerOpen] = useState(false);
 
   const openImageViewer = useCallback((index) => {
+    if (!index.length) return
+
     setCurrentImage(index);
     setIsViewerOpen(true);
   }, []);
@@ -40,27 +67,35 @@ const EventDetail = props => {
     setIsViewerOpen(false);
   };
 
-  const dummy = {
-    "event_article": "Event start",
-    "event_image": "https://images.unsplash.com/photo-1453728013993-6d66e9c9123a?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8dmlld3xlbnwwfHwwfHw%3D&w=1000&q=80",
-    "event_location": "Event location string",
-    "event_start": "2022-07-30T12:30:00Z",
-    "event_title": "Test event title",
-    "event_url": "test-event-title"
-  }
-
   return (
     <>
       <Main title='Event Detail'>
         <Breadcrumb nav={nav} />
         <div className='event-detail'>
-          {Object.keys(dummy).map((item, id) =>
+          {Object.keys(data).filter(res => slugDictionary[res]).map((item, id) =>
             <div className='event-detail_row' key={id}>
               <h3 className='text_field field'>{slugDictionary[item]}</h3>
               <h3 className="text_field" style={{ margin: '0 5px' }}>:</h3>
-              { item === 'event_image' ? <img src={dummy[item]} alt='event' onClick={() => openImageViewer([dummy[item]])} /> : <h3 className="text_field">{dummy[item]}</h3> }
+              { item === 'event_image' ? (
+                <img
+                  src={data[item]}
+                  alt='event'
+                  onClick={() => openImageViewer([data[item]])}
+                  onError={({ currentTarget }) => {
+                    currentTarget.onerror = null // prevents looping
+                    currentTarget.src =
+                      'https://upload.wikimedia.org/wikipedia/commons/6/65/No-Image-Placeholder.svg'
+                  }}
+                />
+              ) : <h3 className="text_field">{item === 'event_start' ? dayjs(data[item]).format('DD-MM-YYYY') : data[item]}</h3> }
             </div>
           )}
+          <Button type='primary' onClick={() => navigate(`/event/form/${data.job_url}`, {
+            state: {
+              id: data.event_id,
+              url: data.event_url,
+            }
+          })}>Edit</Button>
         </div>
       </Main>
 

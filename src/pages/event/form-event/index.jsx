@@ -1,27 +1,35 @@
 import React, { useEffect, useState, useCallback } from 'react'
 import PropTypes from 'prop-types'
 import ImageViewer from "react-simple-image-viewer";
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useParams, useLocation } from 'react-router-dom'
 import { LeftOutlined, CloudUploadOutlined, CloseCircleOutlined } from '@ant-design/icons';
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
 import { Button, Form, Input, message, Upload, DatePicker } from 'antd'
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import moment from 'moment'
 
 import Breadcrumb from '../../../components/breadcrumb'
 import Main from '../../../components/main';
 import '../event.sass'
 import TextError from '../../../components/error-message';
+import { _axios } from '../../../utils/_axios';
+import { getErrorMessage, RESPONSE_STATUS } from '../../../utils/apiHelper';
 
 const FormEvent = props => {
+  const location = useLocation()
   const navigate = useNavigate();
-  const [isUploading, setisUploading] = useState(false)
+  const { url: paramsURL } = useParams()
 
+  const [isLoading, setisLoading] = useState(false)
+  const [isUploading, setisUploading] = useState(false)
   const [currentImage, setCurrentImage] = useState('');
   const [isViewerOpen, setIsViewerOpen] = useState(false);
 
   const openImageViewer = useCallback((index) => {
+    if (!index.length) return
+
     setCurrentImage(index);
     setIsViewerOpen(true);
   }, []);
@@ -44,19 +52,14 @@ const FormEvent = props => {
     },
   ]
 
-  // "event_title" : "Test event title",
-  // "event_image" : "Event image url",
-  // "event_location" : "Event location string",
-  // "event_article" : "Event start",
-  // "event_start" : "2022-07-30T12:30:00Z"
-
-  const { handleChange, handleSubmit, setFieldValue, values, errors, touched } = useFormik({
+  const { handleChange, handleSubmit, setFieldValue, setValues, values, errors, touched } = useFormik({
     initialValues: {
-      event_title : "",
-      event_image : "",
-      event_location : "",
-      event_article : "",
-      event_start : ""
+      event_title: "",
+      event_image: "",
+      event_location: "",
+      event_article: "",
+      event_start: "",
+      image_url_uploaded: '',
     },
     validationSchema: Yup.object({
       event_title: Yup.string().required('Title is Required'),
@@ -67,8 +70,80 @@ const FormEvent = props => {
     }),
     onSubmit: (val) => {
       console.log(val);
+
+      const payload = {
+        event_title: val.event_title,
+        event_image: val.image_url_uploaded,
+        event_location: val.event_location,
+        event_article: val.event_article,
+        event_start: val.event_start,
+      }
+
+      if (paramsURL) {
+        handleEditEvent(payload)
+      } else {
+        handleAddEvent(payload)
+      }
     }
   })
+
+  useEffect(() => {
+    if (!paramsURL) return
+
+    fetchDetailForm()
+  }, [])
+
+  const fetchDetailForm = async() => {
+    setisLoading(true)
+
+    try {
+      const { data: { data }, status } = await _axios.get(`/api/events/url/${paramsURL}`)
+      if (RESPONSE_STATUS.includes(status)) {
+        setValues({
+          event_title : data.event_title,
+          event_image : data.event_image,
+          event_location : data.event_location,
+          event_article : data.event_article,
+          event_start : moment(data.event_start)
+        })
+        setisLoading(false)
+      }
+    } catch (error) {
+      setisLoading(false)
+      message.error(getErrorMessage(error))
+    }
+  }
+
+  const handleAddEvent = async(payload) => {
+    setisLoading(true)
+
+    try {
+      const { status } = await _axios.post('/api/events', payload)
+      if (RESPONSE_STATUS.includes(status)) {
+        setisLoading(false)
+        message.success('Menambah Agenda Sukses!.', 2, () => navigate('/event'))
+      }
+    } catch (error) {
+      setisLoading(false)
+      message.error(getErrorMessage(error))
+    }
+  }
+
+  const handleEditEvent = async(payload) => {
+    setisLoading(true)
+    const { state } = location
+
+    try {
+      const { status } = await _axios.put(`/api/events/${state.id}`, payload)
+      if (RESPONSE_STATUS.includes(status)) {
+        setisLoading(false)
+        message.success('Mengubah Agenda Sukses!.', 2, () => navigate(`/event`))
+      }
+    } catch (error) {
+      setisLoading(false)
+      message.error(getErrorMessage(error))
+    }
+  }
 
   useEffect(() => {
     console.log({ values, errors });
@@ -81,18 +156,26 @@ const FormEvent = props => {
   }
 
   const handleChangeUpload = (info) => {
-    if (info.file.status === 'uploading') {
-      setisUploading(true)
-      info.file.status = 'done'
-      return
-    }
+    getBase64(info.fileList[0].originFileObj, async (imageUrl) => {
+      const payload = {
+        image_name: info.file.name,
+        image_data: imageUrl
+      }
 
-    if (info.file.status === 'done') {
-      getBase64(info.file.originFileObj, (imageUrl) => {
-        setFieldValue('event_image', imageUrl)
+      setFieldValue('event_image', imageUrl)
+      setisUploading(true)
+
+      try {
+        const { data: { data: { Data } }, status } = await _axios.post('/api/events/upload/image', payload)
+        if (RESPONSE_STATUS.includes(status)) {
+          setFieldValue('image_url_uploaded', Data)
+          setisUploading(false)
+        }
+      } catch (error) {
         setisUploading(false)
-      })
-    }
+        message.error(getErrorMessage(error))
+      }
+    })
   }
 
   const beforeUploadImage = (file) => {
@@ -107,9 +190,7 @@ const FormEvent = props => {
       message.error('Image must smaller than 2MB!');
     }
 
-    setisUploading(false)
-
-    return isJpgOrPng && sizeAllowed;
+    return false;
   }
   return (
     <>
@@ -144,18 +225,23 @@ const FormEvent = props => {
           </Form.Item>
           <Form.Item label='Image'>
             {!values.event_image ? (
-              <Upload
-                className="uploader"
-                showUploadList={false}
-                beforeUpload={(info) => beforeUploadImage(info)}
-                onChange={(info) => handleChangeUpload(info)}
-                disabled={isUploading}
-              >
-                <div>
-                  <CloudUploadOutlined />
-                  <h3 className='ant-upload-text'>Unggah</h3>
-                </div>
-              </Upload>
+              <div className='wrapper-error-boundary'>
+                <Upload
+                  className="uploader"
+                  showUploadList={false}
+                  beforeUpload={(info) => beforeUploadImage(info)}
+                  onChange={(info) => handleChangeUpload(info)}
+                  disabled={isUploading || isLoading}
+                >
+                  <div>
+                    <CloudUploadOutlined />
+                    <h3 className='ant-upload-text'>Unggah</h3>
+                  </div>
+                </Upload>
+                {errors.event_image && touched.event_image &&
+                  <TextError>{errors.event_image}</TextError>
+                }
+              </div>
             ) : (
               <div className='image-wrapper'>
                 <img

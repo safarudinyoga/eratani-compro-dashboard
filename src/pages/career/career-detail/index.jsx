@@ -29,7 +29,6 @@ const CareerDetail = props => {
     try {
       const { data: { data }, status } = await _axios.get(`/api/jobs/url/${id}`)
       if (RESPONSE_STATUS.includes(status)) {
-        delete data['job_id']
         setisLoading(false)
         setData(data)
       }
@@ -57,7 +56,7 @@ const CareerDetail = props => {
     <Main title='Career Detail'>
       <Breadcrumb nav={nav} />
       <div className='career-detail'>
-      {Object.keys(data).map((item, id) =>
+      {Object.keys(data).filter(res => slugDictionary[res]).map((item, id) =>
         <div className='career-detail_row' key={id}>
           <h3 className='text_field field'>{slugDictionary[item]}</h3>
           <h3 className="text_field" style={{ margin: '0 5px' }}>:</h3>
@@ -65,7 +64,12 @@ const CareerDetail = props => {
         </div>
       )}
 
-      <Button type='primary' onClick={() => navigate(`/career/form/${data.job_url}`)}>Edit</Button>
+      <Button type='primary' onClick={() => navigate(`/career/form/${data.job_url}`, {
+        state: {
+          id: data.job_id,
+          url: data.job_url,
+        }
+      })}>Edit</Button>
       </div>
     </Main>
   )

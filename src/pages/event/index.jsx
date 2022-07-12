@@ -1,6 +1,6 @@
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useEffect } from 'react'
 import PropTypes from 'prop-types'
-import { Table, Button } from 'antd'
+import { Table, Button, message, Modal } from 'antd'
 import ImageViewer from "react-simple-image-viewer";
 import { Link, useNavigate } from 'react-router-dom';
 
@@ -9,20 +9,11 @@ import TableControl from '../../components/table-control'
 import TablePagination from '../../components/table-pagination'
 import dayjs from 'dayjs';
 import './event.sass'
+import { _axios } from '../../utils/_axios';
+import { getErrorMessage, RESPONSE_STATUS } from '../../utils/apiHelper';
+import { DeleteOutlined } from '@ant-design/icons';
 
-const dummy = [
-  {
-      "event_article": "Event start",
-      "event_id": 1,
-      "event_image": "https://images.unsplash.com/photo-1453728013993-6d66e9c9123a?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8dmlld3xlbnwwfHwwfHw%3D&w=1000&q=80",
-      "event_location": "Event location string",
-      "event_start": "2022-07-30T12:30:00Z",
-      "event_title": "Test event title",
-      "event_url": "test-event-title"
-  }
-]
-
-const columns = (openImageViewer) => [
+const columns = (openImageViewer, setmodalDelete) => [
   {
     title: 'Title',
     dataIndex: 'event_title',
@@ -33,7 +24,18 @@ const columns = (openImageViewer) => [
     title: 'Image',
     dataIndex: 'event_image',
     key: 'event_image',
-    render: (_, { event_image }) => <img src={event_image} alt='career' onClick={() => openImageViewer([event_image])} /> || '-'
+    render: (_, { event_image }) => (
+      <img
+        src={event_image}
+        alt='event'
+        onClick={() => openImageViewer([event_image])}
+        onError={({ currentTarget }) => {
+          currentTarget.onerror = null // prevents looping
+          currentTarget.src =
+            'https://upload.wikimedia.org/wikipedia/commons/6/65/No-Image-Placeholder.svg'
+        }}
+      />
+    ) || '-'
   },
   {
     title: 'Location & date',
@@ -44,13 +46,14 @@ const columns = (openImageViewer) => [
   {
     title: '',
     key: 'viewDetail',
-    render: (_, { event_id }) => (
-      <span>
-        <Link to={`/event/${event_id}`}>
+    render: (_, { event_url, event_id }) => (
+      <span className='actions_table'>
+        <Link to={`/event/${event_url}`}>
           <Button type='primary'>
             Detail
           </Button>
         </Link>
+        <span className='delete' onClick={() => setmodalDelete({ id: event_id, isOpen: true })}><DeleteOutlined /></span>
       </span>
     )
   },
@@ -58,10 +61,58 @@ const columns = (openImageViewer) => [
 
 const Event = props => {
   const navigate = useNavigate()
+  const [isLoading, setisLoading] = useState(false)
+  const [modalDelete, setmodalDelete] = useState({
+    id: null,
+    isOpen: false
+  })
+  const [data, setData] = useState([])
   const [currentImage, setCurrentImage] = useState('');
   const [isViewerOpen, setIsViewerOpen] = useState(false);
 
+  useEffect(() => {
+    handleFetch()
+  }, [])
+
+  const handleFetch = async() => {
+    setisLoading(true)
+
+    try {
+      const { data: { data }, status } = await _axios.get('/api/events')
+      if (RESPONSE_STATUS.includes(status)) {
+        setisLoading(false)
+        setData(data)
+      }
+    } catch (error) {
+      setisLoading(false)
+      message.error(getErrorMessage(error))
+    }
+  }
+
+  const handleDelete = async() => {
+    setisLoading(true)
+
+    try {
+      const { status } = await _axios.delete(`/api/events/${modalDelete.id}`)
+      if (RESPONSE_STATUS.includes(status)) {
+        setisLoading(false)
+        message.success('Berhasil Menghapus Data')
+        handleFetch()
+        setmodalDelete({
+          isOpen: false,
+          id: null
+        })
+      }
+    } catch (error) {
+      setisLoading(false)
+      message.error(getErrorMessage(error))
+    }
+  }
+
   const openImageViewer = useCallback((index) => {
+    console.log(index);
+    if (!index.length) return
+
     setCurrentImage(index);
     setIsViewerOpen(true);
   }, []);
@@ -83,14 +134,16 @@ const Event = props => {
       <Main title='Event'>
         <TableControl handleControl={handleControl} />
         <Table
-          dataSource={dummy}
+          loading={isLoading}
+          dataSource={data}
           pagination={false}
-          columns={columns(openImageViewer)}
+          columns={columns(openImageViewer, setmodalDelete)}
           className='event_table'
           rowKey="event_id"
           key="event_id"
         />
         <TablePagination
+          loading={isLoading}
           pagination={{
             page: 1,
             total: 2,
@@ -113,6 +166,16 @@ const Event = props => {
           closeOnClickOutside={true}
         />
       )}
+
+      <Modal
+        title="Konfirmasi"
+        visible={modalDelete.isOpen}
+        onOk={handleDelete}
+        confirmLoading={isLoading}
+        onCancel={() => setmodalDelete({ id: null, isOpen: false })}
+      >
+        <p>Apakah anda yakin ingin menghapus data ini ?</p>
+      </Modal>
     </>
   )
 }

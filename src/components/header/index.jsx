@@ -1,14 +1,14 @@
-import { useState } from 'react'
 import { Layout, Avatar, Dropdown, Modal, Badge, Menu } from 'antd';
 import logo from '../../assets/logo.svg'
 import { MenuUnfoldOutlined, CaretDownOutlined, UserOutlined } from '@ant-design/icons';
 
 // components & styles
 import './header.sass'
+import { COOKIES, SITE_COOKIES } from '../../utils/cookies';
 
 const { Header } = Layout
 
-const HeaderLayout = ({ showSidebar, title = 'Dashboard Company Profile'}) => {
+const HeaderLayout = ({ showSidebar, title = 'Dashboard Company Profile', handleLogout }) => {
   const getItem = (label, key, icon, children, type) => ({
     key,
     icon,
@@ -18,7 +18,7 @@ const HeaderLayout = ({ showSidebar, title = 'Dashboard Company Profile'}) => {
   })
 
   const items = [
-    getItem((<a href="#" onClick={() => {}}>Log Out</a>), 'menu1'),
+    getItem((<a href="#" onClick={() => handleLogout()}>Log Out</a>), 'menu1'),
   ];
 
   const menu = (
@@ -42,9 +42,7 @@ const HeaderLayout = ({ showSidebar, title = 'Dashboard Company Profile'}) => {
             <a className="ant-dropdown-link" href="#">
               <Avatar icon={<UserOutlined />} />
               <span className="layout-header_user__username">
-                {/* {COOKIES.get(SITE_COOKIES.NAME)}
-                 */}
-                 testinguser1
+                 {COOKIES.get(SITE_COOKIES.EMAIL)}
               </span>
               <span className="layout-header_user__caret">
                 <CaretDownOutlined />

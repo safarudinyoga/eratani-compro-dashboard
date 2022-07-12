@@ -29,7 +29,6 @@ const BlogDetail = props => {
     try {
       const { data: { data }, status } = await _axios.get(`/api/blogs/url/${id}`)
       if (RESPONSE_STATUS.includes(status)) {
-        delete data['blog_id']
         setData(data)
         setisLoading(false)
       }
@@ -56,6 +55,8 @@ const BlogDetail = props => {
   const [isViewerOpen, setIsViewerOpen] = useState(false);
 
   const openImageViewer = useCallback((index) => {
+    if (!index.length) return
+
     setCurrentImage(index);
     setIsViewerOpen(true);
   }, []);
@@ -70,7 +71,7 @@ const BlogDetail = props => {
       <Main title='Blog Detail'>
         <Breadcrumb nav={nav} />
         <div className='blog-detail'>
-          {Object.keys(data).map((item, i) =>
+          {Object.keys(data).filter(res => slugDictionary[res]).map((item, i) =>
             <div className='blog-detail_row' key={i}>
               <h3 className='text_field field'>{slugDictionary[item]}</h3>
               <h3 className="text_field" style={{ margin: '0 5px' }}>:</h3>
@@ -90,7 +91,12 @@ const BlogDetail = props => {
               )}
             </div>
           )}
-        <Button type='primary' onClick={() => navigate(`/blog/form/${data.blog_url}`)}>Edit</Button>
+        <Button type='primary' onClick={() => navigate(`/blog/form/${data.blog_url}`, {
+          state: {
+            id: data.blog_id,
+            url: data.blog_url,
+          }
+        })}>Edit</Button>
         </div>
       </Main>
 

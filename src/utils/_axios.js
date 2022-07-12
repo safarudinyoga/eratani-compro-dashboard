@@ -1,11 +1,11 @@
 import { message } from 'antd';
 import axios from 'axios'
-import { getErrorMessage, RESPONSE_STATUS } from './apiHelper';
+import { getErrorMessage, RESPONSE_STATUS, RESPONSE_STATUS_NOT_AUTHENTICATED } from './apiHelper';
 import { COOKIES, setCookie, SITE_COOKIES } from './cookies';
 import { history } from './history';
 
 export const _axios = axios.create({ baseURL: 'https://compro-api.eratani.co.id' });
-// _axios.defaults.headers.common['Authorization'] = `Bearer ${COOKIES.get('access_token')}`;
+
 _axios.interceptors.request.use(
   (config) => {
     const access_token = COOKIES.get(SITE_COOKIES.ACCESSTOKEN)
@@ -26,12 +26,10 @@ _axios.interceptors.response.use(
     return res
   },
   async (error) => {
-    console.log(error, 'error');
-    message.error(getErrorMessage(error))
     const config = error.config
     if (config.url !== '/api/auth/login' && error.response) {
       // expired => change to renew token
-      if (error.response.status === 401 && !config._retry) {
+      if (RESPONSE_STATUS_NOT_AUTHENTICATED.includes(error.response.status) && !config._retry) {
         config._retry = true
         const cookies_refresh_token = COOKIES.get(SITE_COOKIES.REFRESHTOKEN)
 

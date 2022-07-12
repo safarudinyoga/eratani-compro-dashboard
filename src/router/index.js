@@ -32,7 +32,8 @@ const privateRoute = [
   { path: '/career/form/:url', element: <FormCareer /> },
   { path: '/event', element: <Event /> },
   { path: '/event/:id', element: <EventDetail /> },
-  { path: '/event/form/*', element: <FormEvent /> },
+  { path: '/event/form', element: <FormEvent /> },
+  { path: '/event/form/:url', element: <FormEvent /> },
 ]
 
 const publicRouting = publicRoute.map((props, key) => (

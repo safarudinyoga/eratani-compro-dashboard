@@ -1,4 +1,5 @@
 export const RESPONSE_STATUS = [200, 201, 202, 203, 204]
+export const RESPONSE_STATUS_NOT_AUTHENTICATED = [401, 403]
 
 export const getErrorMessage = (err, defaultMessage = 'Terjadi kesalahan') => {
   let errorMessage = ''
