@@ -159,7 +159,7 @@ const FormEvent = props => {
     getBase64(info.fileList[0].originFileObj, async (imageUrl) => {
       const payload = {
         image_name: info.file.name,
-        image_data: imageUrl
+        image_data: imageUrl.split(',')[1]
       }
 
       setFieldValue('event_image', imageUrl)

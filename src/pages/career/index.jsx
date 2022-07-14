@@ -92,7 +92,7 @@ const Career = props => {
     setisLoading(true)
 
     try {
-      const { status } = await _axios.delete(`/api/blogs/${modalDelete.id}`)
+      const { status } = await _axios.delete(`/api/jobs/${modalDelete.id}`)
       if (RESPONSE_STATUS.includes(status)) {
         setisLoading(false)
         message.success('Berhasil Menghapus Data')

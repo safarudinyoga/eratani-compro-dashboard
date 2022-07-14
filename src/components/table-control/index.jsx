@@ -7,7 +7,6 @@ import './tableheader.sass'
 const TableControl = ({
   handleControl
 }) => {
-  const { button: { text, handleClick } } = handleControl
 
   return (
     <div className='table-control'>
@@ -16,7 +15,9 @@ const TableControl = ({
         <></>
       </div>
       <div className='table-control_end_block'>
-        <Button type='primary' onClick={handleClick}>{text}</Button>
+        { handleControl &&
+          <Button type='primary' onClick={handleControl.button.handleClick}>{handleControl.button.text}</Button>
+        }
       </div>
     </div>
   )

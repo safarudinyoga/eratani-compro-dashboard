@@ -13,6 +13,7 @@ import EventDetail from '../pages/event/event-detail';
 import FormBlog from '../pages/blog/form-blog';
 import FormCareer from '../pages/career/form-career';
 import FormEvent from '../pages/event/form-event';
+import MapManagement from '../pages/map';
 
 const publicRoute = [
   // all public route
@@ -34,6 +35,7 @@ const privateRoute = [
   { path: '/event/:id', element: <EventDetail /> },
   { path: '/event/form', element: <FormEvent /> },
   { path: '/event/form/:url', element: <FormEvent /> },
+  { path: '/map', element: <MapManagement /> },
 ]
 
 const publicRouting = publicRoute.map((props, key) => (
