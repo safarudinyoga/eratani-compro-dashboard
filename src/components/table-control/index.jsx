@@ -23,6 +23,8 @@ const TableControl = ({
   )
 }
 
-TableControl.propTypes = {}
+TableControl.propTypes = {
+  handleControl: PropTypes.object
+}
 
 export default TableControl

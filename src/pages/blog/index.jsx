@@ -1,5 +1,4 @@
 import { useState, useCallback, useEffect } from 'react'
-import PropTypes from 'prop-types'
 import { Table, Button, message, Modal } from 'antd'
 import ImageViewer from "react-simple-image-viewer";
 import { Link, useNavigate } from 'react-router-dom';
@@ -7,7 +6,6 @@ import { DeleteOutlined } from '@ant-design/icons';
 
 // components & styles
 import Main from '../../components/main'
-import TablePagination from '../../components/table-pagination';
 import TableControl from '../../components/table-control';
 import './blog.sass'
 import { _axios } from '../../utils/_axios';
@@ -144,16 +142,6 @@ const Blog = props => {
           rowKey="blog_id"
           key="blog_id"
         />
-        <TablePagination
-          pagination={{
-            page: 1,
-            total: 2,
-            limit: 10
-          }}
-          showPageNumber
-          go={() => console.log()}
-          loading={isLoading}
-        />
       </Main>
 
       {isViewerOpen && (
@@ -181,7 +169,5 @@ const Blog = props => {
     </>
   )
 }
-
-Blog.propTypes = {}
 
 export default Blog

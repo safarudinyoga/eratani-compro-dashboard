@@ -28,7 +28,6 @@ const Login = () => {
       password: Yup.string().required('Password harus diisi!')
     }),
     onSubmit: (val) => {
-      console.log(val)
       handleSubmitLogin(val)
     }
   })

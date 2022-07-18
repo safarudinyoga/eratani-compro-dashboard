@@ -1,14 +1,14 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useCallback, useState, useEffect } from 'react'
-import PropTypes from 'prop-types'
 import { useNavigate ,useParams } from 'react-router-dom'
 import { LeftOutlined } from '@ant-design/icons';
 import ImageViewer from "react-simple-image-viewer";
+import { Button, message, Skeleton } from 'antd';
 
 import Breadcrumb from '../../../components/breadcrumb'
 import Main from '../../../components/main';
 import { slugDictionary } from '../../../utils/slugDictionary';
 import '../blog.sass'
-import { Button, message } from 'antd';
 import { _axios } from '../../../utils/_axios';
 import { getErrorMessage, RESPONSE_STATUS } from '../../../utils/apiHelper';
 import dayjs from 'dayjs';
@@ -71,32 +71,36 @@ const BlogDetail = props => {
       <Main title='Blog Detail'>
         <Breadcrumb nav={nav} />
         <div className='blog-detail'>
-          {Object.keys(data).filter(res => slugDictionary[res]).map((item, i) =>
-            <div className='blog-detail_row' key={i}>
-              <h3 className='text_field field'>{slugDictionary[item]}</h3>
-              <h3 className="text_field" style={{ margin: '0 5px' }}>:</h3>
-              { item === 'blog_image' ? (
-                <img
-                  src={data[item]}
-                  alt='blog'
-                  onClick={() => openImageViewer([data[item]])}
-                  onError={({ currentTarget }) => {
-                    currentTarget.onerror = null // prevents looping
-                    currentTarget.src =
-                      'https://upload.wikimedia.org/wikipedia/commons/6/65/No-Image-Placeholder.svg'
-                  }}
-                />
-              ) : (
-                <h3 className="text_field">{(item === 'created_at' ? dayjs(data[item]).format('DD-MM-YYYY') : data[item]) || '-'}</h3>
+          { isLoading ? <Skeleton /> : (
+            <>
+              {Object.keys(data).filter(res => slugDictionary[res]).map((item, i) =>
+                <div className='blog-detail_row' key={i}>
+                  <h3 className='text_field field'>{slugDictionary[item]}</h3>
+                  <h3 className="text_field" style={{ margin: '0 5px' }}>:</h3>
+                  { item === 'blog_image' ? (
+                    <img
+                      src={data[item]}
+                      alt='blog'
+                      onClick={() => openImageViewer([data[item]])}
+                      onError={({ currentTarget }) => {
+                        currentTarget.onerror = null // prevents looping
+                        currentTarget.src =
+                          'https://upload.wikimedia.org/wikipedia/commons/6/65/No-Image-Placeholder.svg'
+                      }}
+                    />
+                  ) : (
+                    <h3 className="text_field">{(item === 'created_at' ? dayjs(data[item]).format('DD-MM-YYYY') : data[item]) || '-'}</h3>
+                  )}
+                </div>
               )}
-            </div>
+              <Button type='primary' onClick={() => navigate(`/blog/form/${data.blog_url}`, {
+                state: {
+                  id: data.blog_id,
+                  url: data.blog_url,
+                }
+              })}>Edit</Button>
+            </>
           )}
-        <Button type='primary' onClick={() => navigate(`/blog/form/${data.blog_url}`, {
-          state: {
-            id: data.blog_id,
-            url: data.blog_url,
-          }
-        })}>Edit</Button>
         </div>
       </Main>
 
@@ -115,7 +119,5 @@ const BlogDetail = props => {
     </>
   )
 }
-
-BlogDetail.propTypes = {}
 
 export default BlogDetail

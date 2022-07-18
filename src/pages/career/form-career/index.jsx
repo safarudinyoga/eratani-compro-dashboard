@@ -1,5 +1,5 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from 'react'
-import PropTypes from 'prop-types'
 import { useNavigate, useParams, useLocation } from 'react-router-dom'
 import { LeftOutlined } from '@ant-design/icons';
 import { useFormik } from 'formik'
@@ -18,7 +18,7 @@ import { _axios } from '../../../utils/_axios';
 
 const { Option } = Select;
 
-const FormCareer = props => {
+const FormCareer = () => {
   const location = useLocation()
   const { url: paramsURL } = useParams()
   const navigate = useNavigate();
@@ -136,10 +136,6 @@ const FormCareer = props => {
       message.error(getErrorMessage(error))
     }
   }
-
-  useEffect(() => {
-    console.log({ values, errors });
-  }, [values, errors])
 
   const jobTypeOption = [
     {
@@ -283,7 +279,6 @@ const FormCareer = props => {
             data=""
             onReady={ editor => {
               // You can store the "editor" and use when it is needed.
-              // console.log( 'Editor is ready to use!', editor );
             }}
             onChange={ ( event, editor ) => {
               const data = editor.getData();
@@ -301,7 +296,6 @@ const FormCareer = props => {
             data=""
             onReady={ editor => {
               // You can store the "editor" and use when it is needed.
-              // console.log( 'Editor is ready to use!', editor );
             }}
             onChange={ ( event, editor ) => {
               const data = editor.getData();
@@ -333,7 +327,5 @@ const FormCareer = props => {
     </Main>
   )
 }
-
-FormCareer.propTypes = {}
 
 export default FormCareer

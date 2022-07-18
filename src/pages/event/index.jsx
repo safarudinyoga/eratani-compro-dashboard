@@ -1,12 +1,10 @@
 import { useState, useCallback, useEffect } from 'react'
-import PropTypes from 'prop-types'
 import { Table, Button, message, Modal } from 'antd'
 import ImageViewer from "react-simple-image-viewer";
 import { Link, useNavigate } from 'react-router-dom';
 
 import Main from '../../components/main'
 import TableControl from '../../components/table-control'
-import TablePagination from '../../components/table-pagination'
 import dayjs from 'dayjs';
 import './event.sass'
 import { _axios } from '../../utils/_axios';
@@ -59,7 +57,7 @@ const columns = (openImageViewer, setmodalDelete) => [
   },
 ]
 
-const Event = props => {
+const Event = () => {
   const navigate = useNavigate()
   const [isLoading, setisLoading] = useState(false)
   const [modalDelete, setmodalDelete] = useState({
@@ -110,7 +108,6 @@ const Event = props => {
   }
 
   const openImageViewer = useCallback((index) => {
-    console.log(index);
     if (!index.length) return
 
     setCurrentImage(index);
@@ -142,16 +139,6 @@ const Event = props => {
           rowKey="event_id"
           key="event_id"
         />
-        <TablePagination
-          loading={isLoading}
-          pagination={{
-            page: 1,
-            total: 2,
-            limit: 10
-          }}
-          showPageNumber
-          go={() => console.log()}
-        />
       </Main>
 
       {isViewerOpen && (
@@ -179,7 +166,5 @@ const Event = props => {
     </>
   )
 }
-
-Event.propTypes = {}
 
 export default Event

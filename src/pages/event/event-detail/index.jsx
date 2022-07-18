@@ -1,9 +1,9 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useCallback, useState, useEffect } from 'react'
-import PropTypes from 'prop-types'
 import { useNavigate ,useParams } from 'react-router-dom'
 import { LeftOutlined } from '@ant-design/icons';
 import ImageViewer from "react-simple-image-viewer";
-import { Button, message } from 'antd';
+import { Button, message, Skeleton } from 'antd';
 
 import Breadcrumb from '../../../components/breadcrumb'
 import Main from '../../../components/main';
@@ -72,30 +72,34 @@ const EventDetail = props => {
       <Main title='Event Detail'>
         <Breadcrumb nav={nav} />
         <div className='event-detail'>
-          {Object.keys(data).filter(res => slugDictionary[res]).map((item, id) =>
-            <div className='event-detail_row' key={id}>
-              <h3 className='text_field field'>{slugDictionary[item]}</h3>
-              <h3 className="text_field" style={{ margin: '0 5px' }}>:</h3>
-              { item === 'event_image' ? (
-                <img
-                  src={data[item]}
-                  alt='event'
-                  onClick={() => openImageViewer([data[item]])}
-                  onError={({ currentTarget }) => {
-                    currentTarget.onerror = null // prevents looping
-                    currentTarget.src =
-                      'https://upload.wikimedia.org/wikipedia/commons/6/65/No-Image-Placeholder.svg'
-                  }}
-                />
-              ) : <h3 className="text_field">{item === 'event_start' ? dayjs(data[item]).format('DD-MM-YYYY') : data[item]}</h3> }
-            </div>
+          {isLoading ? <Skeleton /> : (
+            <>
+              {Object.keys(data).filter(res => slugDictionary[res]).map((item, id) =>
+                <div className='event-detail_row' key={id}>
+                  <h3 className='text_field field'>{slugDictionary[item]}</h3>
+                  <h3 className="text_field" style={{ margin: '0 5px' }}>:</h3>
+                  { item === 'event_image' ? (
+                    <img
+                      src={data[item]}
+                      alt='event'
+                      onClick={() => openImageViewer([data[item]])}
+                      onError={({ currentTarget }) => {
+                        currentTarget.onerror = null // prevents looping
+                        currentTarget.src =
+                          'https://upload.wikimedia.org/wikipedia/commons/6/65/No-Image-Placeholder.svg'
+                      }}
+                    />
+                  ) : <h3 className="text_field">{item === 'event_start' ? dayjs(data[item]).format('DD-MM-YYYY') : data[item]}</h3> }
+                </div>
+              )}
+              <Button type='primary' onClick={() => navigate(`/event/form/${data.job_url}`, {
+                state: {
+                  id: data.event_id,
+                  url: data.event_url,
+                }
+              })}>Edit</Button>
+            </>
           )}
-          <Button type='primary' onClick={() => navigate(`/event/form/${data.job_url}`, {
-            state: {
-              id: data.event_id,
-              url: data.event_url,
-            }
-          })}>Edit</Button>
         </div>
       </Main>
 
@@ -114,7 +118,5 @@ const EventDetail = props => {
     </>
   )
 }
-
-EventDetail.propTypes = {}
 
 export default EventDetail

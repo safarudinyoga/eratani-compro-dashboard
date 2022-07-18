@@ -1,5 +1,5 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState, useCallback } from 'react'
-import PropTypes from 'prop-types'
 import ImageViewer from "react-simple-image-viewer";
 import { useNavigate, useParams, useLocation } from 'react-router-dom'
 import { LeftOutlined, CloudUploadOutlined, CloseCircleOutlined } from '@ant-design/icons';
@@ -17,7 +17,7 @@ import TextError from '../../../components/error-message';
 import { _axios } from '../../../utils/_axios';
 import { getErrorMessage, RESPONSE_STATUS } from '../../../utils/apiHelper';
 
-const FormEvent = props => {
+const FormEvent = () => {
   const location = useLocation()
   const navigate = useNavigate();
   const { url: paramsURL } = useParams()
@@ -69,7 +69,6 @@ const FormEvent = props => {
       event_start: Yup.string().required('Title is Required'),
     }),
     onSubmit: (val) => {
-      console.log(val);
 
       const payload = {
         event_title: val.event_title,
@@ -144,10 +143,6 @@ const FormEvent = props => {
       message.error(getErrorMessage(error))
     }
   }
-
-  useEffect(() => {
-    console.log({ values, errors });
-  }, [values, errors])
 
   const getBase64 = (img, callback) => {
     const reader = new FileReader()
@@ -276,11 +271,9 @@ const FormEvent = props => {
               data=""
               onReady={ editor => {
                 // You can store the "editor" and use when it is needed.
-                // console.log( 'Editor is ready to use!', editor );
               }}
               onChange={ ( event, editor ) => {
                 const data = editor.getData();
-                // console.log( { event, editor, data } );
                 setFieldValue('event_article', data)
               }}
             />
@@ -305,7 +298,5 @@ const FormEvent = props => {
     </>
   )
 }
-
-FormEvent.propTypes = {}
 
 export default FormEvent

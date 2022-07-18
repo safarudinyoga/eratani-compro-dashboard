@@ -1,9 +1,8 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useState, useEffect } from 'react'
-import PropTypes from 'prop-types'
-import { Button, message } from 'antd'
+import { Button, message, Skeleton } from 'antd'
 import { useNavigate ,useParams } from 'react-router-dom'
 import { LeftOutlined } from '@ant-design/icons';
-import dayjs from 'dayjs';
 
 import Breadcrumb from '../../../components/breadcrumb'
 import Main from '../../../components/main';
@@ -12,7 +11,7 @@ import '../career.sass'
 import { _axios } from '../../../utils/_axios';
 import { getErrorMessage, RESPONSE_STATUS } from '../../../utils/apiHelper';
 
-const CareerDetail = props => {
+const CareerDetail = () => {
   const [isLoading, setisLoading] = useState(false)
   const [data, setData] = useState({})
 
@@ -56,25 +55,26 @@ const CareerDetail = props => {
     <Main title='Career Detail'>
       <Breadcrumb nav={nav} />
       <div className='career-detail'>
-      {Object.keys(data).filter(res => slugDictionary[res]).map((item, id) =>
-        <div className='career-detail_row' key={id}>
-          <h3 className='text_field field'>{slugDictionary[item]}</h3>
-          <h3 className="text_field" style={{ margin: '0 5px' }}>:</h3>
-          <h3 className="text_field">{data[item]}</h3>
-        </div>
-      )}
-
-      <Button type='primary' onClick={() => navigate(`/career/form/${data.job_url}`, {
-        state: {
-          id: data.job_id,
-          url: data.job_url,
-        }
-      })}>Edit</Button>
+        {isLoading ? <Skeleton /> : (
+          <>
+            {Object.keys(data).filter(res => slugDictionary[res]).map((item, id) =>
+              <div className='career-detail_row' key={id}>
+                <h3 className='text_field field'>{slugDictionary[item]}</h3>
+                <h3 className="text_field" style={{ margin: '0 5px' }}>:</h3>
+                <h3 className="text_field">{data[item]}</h3>
+              </div>
+            )}
+            <Button type='primary' onClick={() => navigate(`/career/form/${data.job_url}`, {
+              state: {
+                id: data.job_id,
+                url: data.job_url,
+              }
+            })}>Edit</Button>
+          </>
+        )}
       </div>
     </Main>
   )
 }
-
-CareerDetail.propTypes = {}
 
 export default CareerDetail

@@ -1,5 +1,5 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState, useCallback } from 'react'
-import PropTypes from 'prop-types'
 import ImageViewer from "react-simple-image-viewer";
 import { useNavigate, useParams, useLocation } from 'react-router-dom'
 import { LeftOutlined, CloudUploadOutlined, CloseCircleOutlined } from '@ant-design/icons';
@@ -151,10 +151,6 @@ const FormBlog = props => {
     }
   }
 
-  useEffect(() => {
-    console.log({ values, errors });
-  }, [values, errors])
-
   const getBase64 = (img, callback) => {
     const reader = new FileReader()
     reader.addEventListener('load', () => callback(reader.result))
@@ -281,7 +277,6 @@ const FormBlog = props => {
               data=""
               onReady={ editor => {
                 // You can store the "editor" and use when it is needed.
-                // console.log( 'Editor is ready to use!', editor );
               }}
               onChange={ ( event, editor ) => {
                 const data = editor.getData();
@@ -312,7 +307,5 @@ const FormBlog = props => {
     </>
   )
 }
-
-FormBlog.propTypes = {}
 
 export default FormBlog

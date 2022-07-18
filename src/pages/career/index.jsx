@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react'
-import PropTypes from 'prop-types'
 import { Table, Button, message, Modal } from 'antd'
 import dayjs from 'dayjs'
 import { Link, useNavigate } from 'react-router-dom';
@@ -8,7 +7,6 @@ import { DeleteOutlined } from '@ant-design/icons';
 import Main from '../../components/main'
 import TableControl from '../../components/table-control'
 import './career.sass'
-import TablePagination from '../../components/table-pagination'
 import { _axios } from '../../utils/_axios';
 import { getErrorMessage, RESPONSE_STATUS } from '../../utils/apiHelper';
 
@@ -53,7 +51,7 @@ const columns = (setmodalDelete) => [
   },
 ]
 
-const Career = props => {
+const Career = () => {
   const [isLoading, setisLoading] = useState(false)
   const [dataList, setdataList] = useState([])
   const navigate = useNavigate()
@@ -121,16 +119,6 @@ const Career = props => {
           rowKey="job_id"
           key="job_id"
         />
-        <TablePagination
-          loading={isLoading}
-          pagination={{
-            page: 1,
-            total: 2,
-            limit: 10
-          }}
-          showPageNumber
-          go={() => console.log()}
-        />
       </Main>
 
       <Modal
@@ -145,7 +133,5 @@ const Career = props => {
     </>
   )
 }
-
-Career.propTypes = {}
 
 export default Career
