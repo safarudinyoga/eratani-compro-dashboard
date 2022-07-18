@@ -98,7 +98,7 @@ const Blog = props => {
 
     try {
       // !sementara
-      const { data: { data }, status } = await _axios.get(`/api/blogs/category/article`)
+      const { data: { data }, status } = await _axios.get(`/api/blogs`)
       if (RESPONSE_STATUS.includes(status)) {
         setisLoading(false)
         setData(data)
