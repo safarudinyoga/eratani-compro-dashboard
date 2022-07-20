@@ -58,11 +58,19 @@ const CareerDetail = () => {
         {isLoading ? <Skeleton /> : (
           <>
             {Object.keys(data).filter(res => slugDictionary[res]).map((item, id) =>
-              <div className='career-detail_row' key={id}>
-                <h3 className='text_field field'>{slugDictionary[item]}</h3>
-                <h3 className="text_field" style={{ margin: '0 5px' }}>:</h3>
-                <h3 className="text_field">{data[item]}</h3>
-              </div>
+              ['job_requirements', 'job_responsibilities', 'job_benefits'].includes(item) ? (
+                <div className='career-detail_row' key={id}>
+                  <h3 className='text_field field'>{slugDictionary[item]}</h3>
+                  <h3 className="text_field" style={{ margin: '0 5px' }}>:</h3>
+                  <div dangerouslySetInnerHTML={{ __html: data[item] }}></div>
+                </div>
+              ) : (
+                <div className='career-detail_row' key={id}>
+                  <h3 className='text_field field'>{slugDictionary[item]}</h3>
+                  <h3 className="text_field" style={{ margin: '0 5px' }}>:</h3>
+                  <h3 className="text_field">{data[item]}</h3>
+                </div>
+              )
             )}
             <Button type='primary' onClick={() => navigate(`/career/form/${data.job_url}`, {
               state: {

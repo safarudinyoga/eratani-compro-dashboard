@@ -59,6 +59,7 @@ const FormCareer = () => {
           job_experience: data.job_experience,
           job_application_deadline: moment(data.job_application_deadline),
           job_requirements: data.job_requirements,
+          job_responsibilities: data.job_responsibilities,
           job_benefits: data.job_benefits,
           job_link_url: data.job_link_url
         })
@@ -80,6 +81,7 @@ const FormCareer = () => {
       job_experience: "",
       job_application_deadline: '',
       job_requirements: "",
+      job_responsibilities: "",
       job_benefits: "",
       job_link_url: ""
     },
@@ -92,6 +94,7 @@ const FormCareer = () => {
       job_experience: Yup.string().required('Field is Required'),
       job_application_deadline: Yup.string().required('Field is Required'),
       job_requirements: Yup.string().required('Field is Required'),
+      job_responsibilities: Yup.string().required('Field is Required'),
       job_benefits: Yup.string().required('Field is Required'),
       job_link_url: Yup.string().required('Field is Required')
     }),
@@ -287,6 +290,23 @@ const FormCareer = () => {
           />
           {errors.job_requirements && touched.job_requirements &&
             <TextError>{errors.job_requirements}</TextError>
+          }
+        </Form.Item>
+        <Form.Item label='Responsibilities'>
+          <CKEditor
+            disabled={isLoading}
+            editor={ ClassicEditor }
+            data=""
+            onReady={ editor => {
+              // You can store the "editor" and use when it is needed.
+            }}
+            onChange={ ( event, editor ) => {
+              const data = editor.getData();
+              setFieldValue('job_responsibilities', data)
+            }}
+          />
+          {errors.job_responsibilities && touched.job_responsibilities &&
+            <TextError>{errors.job_responsibilities}</TextError>
           }
         </Form.Item>
         <Form.Item label='Benefits'>

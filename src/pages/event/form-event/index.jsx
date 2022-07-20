@@ -56,7 +56,8 @@ const FormEvent = () => {
     initialValues: {
       event_title: "",
       event_image: "",
-      event_location: "",
+      event_location_title: "",
+      event_location_subtitle: "",
       event_article: "",
       event_start: "",
       image_url_uploaded: '',
@@ -64,7 +65,8 @@ const FormEvent = () => {
     validationSchema: Yup.object({
       event_title: Yup.string().required('Title is Required'),
       event_image: Yup.string().required('Title is Required'),
-      event_location: Yup.string().required('Title is Required'),
+      event_location_title: Yup.string().required('Title is Required'),
+      event_location_subtitle: Yup.string().required('Title is Required'),
       event_article: Yup.string().required('Title is Required'),
       event_start: Yup.string().required('Title is Required'),
     }),
@@ -73,7 +75,8 @@ const FormEvent = () => {
       const payload = {
         event_title: val.event_title,
         event_image: val.image_url_uploaded,
-        event_location: val.event_location,
+        event_location_title: val.event_location_title,
+        event_location_subtitle: val.event_location_subtitle,
         event_article: val.event_article,
         event_start: val.event_start,
       }
@@ -101,7 +104,8 @@ const FormEvent = () => {
         setValues({
           event_title : data.event_title,
           event_image : data.event_image,
-          event_location : data.event_location,
+          event_location_title : data.event_location_title,
+          event_location_subtitle : data.event_location_subtitle,
           event_article : data.event_article,
           event_start : moment(data.event_start)
         })
@@ -205,17 +209,30 @@ const FormEvent = () => {
               <TextError>{errors.event_title}</TextError>
             }
           </Form.Item>
-          <Form.Item label='Event Location'>
+          <Form.Item label='Event Location Title'>
             <Input
-              name='event_location'
+              name='event_location_title'
               type='text'
-              value={values.event_location}
+              value={values.event_location_title}
               onChange={handleChange}
               placeholder='tips'
-              className={errors.event_location && touched.event_location && 'is-invalid'}
+              className={errors.event_location_title && touched.event_location_title && 'is-invalid'}
             />
-            {errors.event_location && touched.event_location &&
-              <TextError>{errors.event_location}</TextError>
+            {errors.event_location_title && touched.event_location_title &&
+              <TextError>{errors.event_location_title}</TextError>
+            }
+          </Form.Item>
+          <Form.Item label='Event Location Subtitle'>
+            <Input
+              name='event_location_subtitle'
+              type='text'
+              value={values.event_location_subtitle}
+              onChange={handleChange}
+              placeholder='tips'
+              className={errors.event_location_subtitle && touched.event_location_subtitle && 'is-invalid'}
+            />
+            {errors.event_location_subtitle && touched.event_location_subtitle &&
+              <TextError>{errors.event_location_subtitle}</TextError>
             }
           </Form.Item>
           <Form.Item label='Image'>

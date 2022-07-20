@@ -39,7 +39,7 @@ const columns = (openImageViewer, setmodalDelete) => [
     title: 'Location & date',
     dataIndex: 'event_location',
     key: 'event_location',
-    render: (_, { event_location, event_start }) => `${event_location}, ${dayjs(event_start).format('DD - MM - YYYY')}` || '-'
+    render: (_, { event_location_title, event_location_subtitle, event_start }) => `${event_location_title} ${event_location_subtitle}, ${dayjs(event_start).format('DD - MM - YYYY')}` || '-'
   },
   {
     title: '',
