@@ -176,7 +176,7 @@ const MapManagement = props => {
       dataIndex: 'city',
       key: 'city',
       width: '65%',
-      render: (_, { id }) => {
+      render: (_, { id, pos }) => {
         const options = [...city]
 
         return (
@@ -193,7 +193,7 @@ const MapManagement = props => {
             onDeselect={(e) => handleDeselectCities(e, id)}
             disabled={handleDisabled(id)}
             allowClear
-            clearIcon={(<CloseCircleOutlined onClick={() => handleClearAllCities(id)} style={{ fontSize: '13px' }} />)}
+            clearIcon={(<CloseCircleOutlined onClick={() => handleClearAllCities(id, pos)} style={{ fontSize: '13px' }} />)}
           />
         )
       }
@@ -208,7 +208,7 @@ const MapManagement = props => {
       title: 'Coming Soon (?)',
       dataIndex: 'comingSoon',
       key: 'comingSoon',
-      render: (_, { id }) => <Switch checkedChildren="Yes" unCheckedChildren="No" checked={handleIsCheckedComingSoon(id)} onChange={(e) => handleChangeComingSoon(e, id)} disabled={handleDisabled(id)} loading={isLoading} />
+      render: (_, { id, pos }) => <Switch checkedChildren="Yes" unCheckedChildren="No" checked={handleIsCheckedComingSoon(id)} onChange={(e) => handleChangeComingSoon(e, id, pos)} disabled={handleDisabled(id)} loading={isLoading} />
     },
   ]
 
@@ -233,6 +233,7 @@ const MapManagement = props => {
       const { status, data: { provinsi } } = await _axios.get('https://dev.farizdotid.com/api/daerahindonesia/provinsi')
       if (RESPONSE_STATUS.includes(status)) {
         const remap = provinsi.map(res => dummyPOS.some(dummy => dummy.prov.toLowerCase() === res.nama.toLowerCase()) ? ({ ...res, pos: dummyPOS.filter(dummy => dummy.prov.toLowerCase() === res.nama.toLowerCase()).length ? dummyPOS.find(dummy => dummy.prov.toLowerCase() === res.nama.toLowerCase()).pos : [] }) : ({ ...res, pos: [] }))
+        console.log(remap);
         setProvince(remap)
       }
     } catch (error) {
@@ -246,7 +247,6 @@ const MapManagement = props => {
     try {
       const { status, data: { kota_kabupaten } } = await _axios.get(`https://dev.farizdotid.com/api/daerahindonesia/kota?id_provinsi=${id}`)
       if (RESPONSE_STATUS.includes(status)) {
-
         setCity(kota_kabupaten.map(res => ({ ...res, label: res.nama, value: res.nama})))
         setisOptionLoading(false)
       }
@@ -263,13 +263,13 @@ const MapManagement = props => {
   const handleChangeCities = (all, index) => setData(data.map(res => res.id === index ? ({ ...res, cities: [ ...res.cities, ...all ].filter((v,i,a)=>a.findIndex(v2=>(v2.id===v.id))===i) }) : res ))
   const handleDeselectCities = (e, index) => setData(data.map((res) => res.id === index ? ({ ...res, cities: res.cities.filter(res => res.value !== e) }) : res))
 
-  const handleClearAllCities = async (index) => {
-    const remapData = data.map(res => res.id === index ? ({ ...res, cities: []}) : res )
+  const handleClearAllCities = async (index, pos) => {
+    const remapData = data.map(res => res.id === index ? ({ ...res, cities: [], pos }) : ({ ...res, pos }) )
     setisLoading(false)
 
     const payload = {
       locations: {
-        map: [ ...data.map(res => res.id === index ? ({ ...res, cities: []}) : res ) ]
+        map: [ ...remapData ]
       }
     }
 
@@ -277,7 +277,6 @@ const MapManagement = props => {
       const { status } = await _axios.put('/api/locations', payload)
       if (RESPONSE_STATUS.includes(status)) {
         message.success('Berhasil mengupdate map management')
-        setData(remapData)
         handleFetchData()
         setisLoading(false)
       }
@@ -288,7 +287,7 @@ const MapManagement = props => {
 
   }
 
-  const handleBlurChangeCities = async () => {
+  const handleBlurChangeCities = async (pos) => {
     setisLoading(true)
 
     const payload = {
@@ -316,7 +315,6 @@ const MapManagement = props => {
     if (!e) {
       tempData = [ ...data ]
       tempData.splice(data.findIndex(res => res.id === id), 1)
-      setData(tempData)
     } else {
       tempData = [
         ...data,
@@ -328,7 +326,6 @@ const MapManagement = props => {
           coming_soon: false
         }
       ]
-      setData(tempData)
     }
 
     const payload = {
@@ -354,9 +351,8 @@ const MapManagement = props => {
     }
   }
 
-  const handleChangeComingSoon = async (e, index) => {
-    const remapData = data.map((res) => res.id === index ? ({ ...res, coming_soon: e }) : res)
-    setData(remapData)
+  const handleChangeComingSoon = async (e, index, pos) => {
+    const remapData = data.map((res) => res.id === index ? ({ ...res, coming_soon: e, pos }) : ({ ...res, pos }))
 
     setisLoading(true)
 
