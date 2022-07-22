@@ -274,7 +274,7 @@ const FormBlog = props => {
             <CKEditor
               disabled={isLoading}
               editor={ ClassicEditor }
-              data=""
+              data={values.blog_article}
               onReady={ editor => {
                 // You can store the "editor" and use when it is needed.
               }}

@@ -89,10 +89,14 @@ const EventDetail = props => {
                           'https://upload.wikimedia.org/wikipedia/commons/6/65/No-Image-Placeholder.svg'
                       }}
                     />
-                  ) : <h3 className="text_field">{item === 'event_start' ? dayjs(data[item]).format('DD-MM-YYYY') : data[item]}</h3> }
+                  ) : item === 'event_article' ? (
+                    <div dangerouslySetInnerHTML={{ __html: data[item] }}></div>
+                  ) : (
+                    <h3 className="text_field">{item === 'event_start' ? dayjs(data[item]).format('DD-MM-YYYY') : data[item]}</h3>
+                  )}
                 </div>
               )}
-              <Button type='primary' onClick={() => navigate(`/event/form/${data.job_url}`, {
+              <Button type='primary' onClick={() => navigate(`/event/form/${data.event_url}`, {
                 state: {
                   id: data.event_id,
                   url: data.event_url,

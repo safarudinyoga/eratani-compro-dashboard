@@ -88,6 +88,8 @@ const BlogDetail = props => {
                           'https://upload.wikimedia.org/wikipedia/commons/6/65/No-Image-Placeholder.svg'
                       }}
                     />
+                  ) : item === 'blog_article' ? (
+                    <div dangerouslySetInnerHTML={{ __html: data[item] }}></div>
                   ) : (
                     <h3 className="text_field">{(item === 'created_at' ? dayjs(data[item]).format('DD-MM-YYYY') : data[item]) || '-'}</h3>
                   )}

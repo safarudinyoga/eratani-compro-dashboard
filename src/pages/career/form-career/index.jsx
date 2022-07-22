@@ -279,7 +279,7 @@ const FormCareer = () => {
           <CKEditor
             disabled={isLoading}
             editor={ ClassicEditor }
-            data=""
+            data={values.job_requirements}
             onReady={ editor => {
               // You can store the "editor" and use when it is needed.
             }}
@@ -296,7 +296,7 @@ const FormCareer = () => {
           <CKEditor
             disabled={isLoading}
             editor={ ClassicEditor }
-            data=""
+            data={values.job_responsibilities}
             onReady={ editor => {
               // You can store the "editor" and use when it is needed.
             }}
@@ -313,7 +313,7 @@ const FormCareer = () => {
           <CKEditor
             disabled={isLoading}
             editor={ ClassicEditor }
-            data=""
+            data={values.job_benefits}
             onReady={ editor => {
               // You can store the "editor" and use when it is needed.
             }}

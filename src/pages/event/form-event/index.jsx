@@ -285,7 +285,7 @@ const FormEvent = () => {
           <Form.Item label='Article'>
             <CKEditor
               editor={ ClassicEditor }
-              data=""
+              data={values.event_article}
               onReady={ editor => {
                 // You can store the "editor" and use when it is needed.
               }}
